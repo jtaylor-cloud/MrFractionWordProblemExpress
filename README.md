@@ -126,22 +126,6 @@ Mr_Fraction_Caboose.png
 
 > **After deploying, hard-refresh** (`Ctrl`/`Cmd` + `Shift` + `R`). Browsers and GitHub Pages both cache CSS and JavaScript aggressively, and a normal reload will happily show you the previous build.
 
-## Adding your own problems
-
-Open **`dispatch.html`** in any browser and fill in as much as you want, with live preview and validation as you type. No install, no account, no internet. See [AUTHORING.md](docs/AUTHORING.md).
-
-## Docs
-
-| Doc | What it is |
-|---|---|
-| [PEDAGOGY.md](docs/PEDAGOGY.md) | The teaching approach and why. Start here. |
-| [JOURNEY-ARCHITECTURE.md](docs/JOURNEY-ARCHITECTURE.md) | The map, trips, stations, hubs |
-| [PROBLEM-SCHEMA.md](docs/PROBLEM-SCHEMA.md) | The contract every problem satisfies |
-| [AUTHORING.md](docs/AUTHORING.md) | For teachers — adding your own problems |
-| [THEME-AND-ACCESSIBILITY.md](docs/THEME-AND-ACCESSIBILITY.md) | Design system, dyslexia provisions, WCAG requirements |
-| [ART-DIRECTION.md](docs/ART-DIRECTION.md) | The visual language |
-| [ROADMAP.md](docs/ROADMAP.md) | What is planned next |
-
 ## License
 
 [Creative Commons Attribution–NonCommercial–ShareAlike 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — free to use and adapt for teaching, with attribution, non-commercially.
