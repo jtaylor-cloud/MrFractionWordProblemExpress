@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mr Fraction's Word Problem Express</title>
+<meta name="description" content="Learn how to approach math word problems — one train line at a time.">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- The loading screen. It sits in the HTML rather than being built by JS so it
+     is on screen during the very moment it exists to cover: the gap before the
+     scripts have run. A JS-built loader cannot show itself while JS is loading.
+
+     `aria-hidden` and no focusable content, so a screen reader is never parked
+     in it, and it removes itself on `load` — never on a timer, which would
+     either flash or outstay the wait it is covering. -->
+<div id="loading-screen" aria-hidden="true">
+  <div class="load-inner">
+    <!-- Signal lamps, above the train, lighting one after another as the page
+         comes up — the sister site's loading dots in this site's own idiom.
+         They are the thing that actually reads as progress; the train below
+         only floats. -->
+    <div class="load-dots" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <img src="assets/art/Mr_Fraction_Train.png" alt="" class="load-train" decoding="async">
+    <p class="load-title">Mr Fraction&rsquo;s Word Problem Express</p>
+    <p class="load-sub">Getting up steam&hellip;</p>
+  </div>
+</div>
+
+<div id="ambient-host"></div>
+
+<div class="shell">
+
+  <header class="station-sign">
+    <div class="sign-inner">
+      <img aria-hidden="true" alt="" id="sign-portrait" class="sign-mark"
+           src="assets/art/Conductor_Mr_Fraction_(Front).png" decoding="async">
+      <div class="sign-text">
+        <h1 class="sign-title">Mr Fraction&rsquo;s Word Problem Express</h1>
+        <span class="sign-sub" id="sign-sub">All lines running</span>
+      </div>
+      <div class="sign-nav">
+        <button class="pill" id="btn-map" type="button">
+          <span aria-hidden="true">&#9673;</span> Map
+        </button>
+        <button class="pill" id="btn-a11y" type="button" aria-expanded="false" aria-controls="a11y-panel">
+          <!-- "& access" collapses to visually-hidden on phones so both pills fit
+               without a sideways scroll. It stays in the accessible name. -->
+          <span aria-hidden="true">&#9678;</span> Reading<span class="pill-more"> &amp; Access</span><span class="visually-hidden"> settings</span>
+        </button>
+      </div>
+    </div>
+    <div id="ticker-host"></div>
+  </header>
+
+  <nav id="route-nav" class="route-strip" aria-label="Your route" hidden>
+    <div class="route-inner">
+      <ol class="route" id="route-map"></ol>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <div id="view"><!-- rendered by app.js --></div>
+  </main>
+
+  <footer class="rail-foot">
+    <p class="foot-lead">
+      Learn how to <strong>start</strong> any word problem: read it, spot the line, plan, solve, check.
+    </p>
+  </footer>
+</div>
+
+<!-- Reading ruler bands -->
+<div class="ruler-band" id="ruler-top" hidden></div>
+<div class="ruler-band" id="ruler-bottom" hidden></div>
+
+<!-- Accessibility panel -->
+<aside class="a11y-panel" id="a11y-panel" aria-label="Reading and access settings" hidden>
+  <div style="display:flex;align-items:center;gap:8px">
+    <h2 style="flex:1">Reading &amp; Access</h2>
+    <button class="opt" id="a11y-close" type="button">Close</button>
+  </div>
+  <p style="font-size:.82em;color:var(--ink-secondary)">
+    These reset if you reload. Press <strong>Alt&nbsp;+&nbsp;A</strong> any time to reopen this panel.
+  </p>
+
+  <fieldset>
+    <legend>Typeface</legend>
+    <div class="opt-row" role="group" id="grp-font">
+      <button class="opt" type="button" data-font="standard" aria-pressed="true">Standard</button>
+      <button class="opt" type="button" data-font="rounded" aria-pressed="false">Rounded</button>
+      <button class="opt" type="button" data-font="dyslexic" aria-pressed="false">OpenDyslexic</button>
+    </div>
+    <p style="font-size:.75em;color:var(--ink-secondary);margin:8px 0 0">
+      Pick whichever you find easiest. There is no &ldquo;correct&rdquo; one.
+    </p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Text size</legend>
+    <div class="opt-row" role="group" id="grp-scale">
+      <button class="opt" type="button" data-scale="100" aria-pressed="true">100%</button>
+      <button class="opt" type="button" data-scale="125" aria-pressed="false">125%</button>
+      <button class="opt" type="button" data-scale="150" aria-pressed="false">150%</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Page tint</legend>
+    <div class="opt-row" role="group" id="grp-tint">
+      <button class="opt" type="button" data-tint="none"  aria-pressed="true">None</button>
+      <button class="opt" type="button" data-tint="peach" aria-pressed="false">Peach</button>
+      <button class="opt" type="button" data-tint="blue"  aria-pressed="false">Blue</button>
+      <button class="opt" type="button" data-tint="green" aria-pressed="false">Green</button>
+      <button class="opt" type="button" data-tint="grey"  aria-pressed="false">Grey</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Reading help</legend>
+    <div class="opt-row" role="group">
+      <button class="opt" type="button" id="opt-ruler"   aria-pressed="false">Reading ruler</button>
+      <button class="opt" type="button" id="opt-chunked" aria-pressed="false">Extra line spacing</button>
+    </div>
+    <p style="font-size:.75em;color:var(--ink-secondary);margin:8px 0 0">
+      The ruler follows your mouse, or the up and down arrow keys.
+    </p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Read aloud</legend>
+    <div class="opt-row">
+      <button class="opt" type="button" id="opt-speak">Read this page</button>
+      <button class="opt" type="button" id="opt-stop-speak">Stop</button>
+    </div>
+    <label for="speak-rate" style="margin-top:12px;font-size:.85em">Speed</label>
+    <input type="range" id="speak-rate" min="0.6" max="1.4" step="0.1" value="1" style="width:100%">
+    <p style="font-size:.75em;color:var(--ink-secondary);margin:8px 0 0" id="speak-note"></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Numbers</legend>
+    <div class="opt-row" role="group">
+      <button class="opt" type="button" id="opt-reveal" aria-pressed="false">Always show numbers</button>
+    </div>
+    <p style="font-size:.75em;color:var(--ink-secondary);margin:8px 0 0">
+      Normally the numbers stay hidden until your second read. That&rsquo;s on purpose &mdash; it
+      helps you look at what the problem is <strong>about</strong> before you start calculating.
+      Turn this on if hidden numbers make reading harder for you.
+    </p>
+  </fieldset>
+</aside>
+
+<!-- Live region for feedback — polite, never assertive -->
+<div id="live" class="visually-hidden" role="status" aria-live="polite"></div>
+
+<script src="assets/js/mrfraction.js"></script>
+<script src="assets/js/companion.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/scenery.js"></script>
+<script src="assets/js/model.js"></script>
+<script src="assets/js/ratio-model.js"></script>
+<script src="assets/js/change-model.js"></script>
+<script src="assets/js/compare-model.js"></script>
+<script src="assets/js/groups-model.js"></script>
+<script src="assets/js/percent-model.js"></script>
+<script src="assets/js/testtrack.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/ratio-scenes.js"></script>
+<script src="assets/js/change-scenes.js"></script>
+<script src="assets/js/compare-scenes.js"></script>
+<script src="assets/js/groups-scenes.js"></script>
+<script src="assets/js/partwhole-scenes.js"></script>
+<script src="content/problems/pw-soup-serving.js"></script>
+<script src="content/problems/pw-helmet-savings.js"></script>
+<script src="content/problems/pw-free-throws.js"></script>
+<script src="content/problems/pw-orders-day.js"></script>
+<script src="content/problems/pw-quilt-colors.js"></script>
+<script src="content/problems/pw-band-brass.js"></script>
+<script src="content/problems/pw-cycling-club.js"></script>
+<script src="content/problems/rr-poster-run.js"></script>
+<script src="content/problems/rr-bread-dough.js"></script>
+<script src="content/problems/rr-van-hours.js"></script>
+<script src="content/problems/rr-timetable-run.js"></script>
+<script src="content/problems/rr-market-stall.js"></script>
+<script src="content/problems/rr-cordial-mix.js"></script>
+<script src="content/problems/ch-lost-property.js"></script>
+<script src="content/problems/cp-late-trains.js"></script>
+<script src="content/problems/cp-ticket-queues.js"></script>
+<script src="content/problems/cp-bench-count.js"></script>
+<script src="content/problems/cp-parking-spaces.js"></script>
+<script src="content/problems/cp-hot-drinks.js"></script>
+<script src="content/problems/eg-crate-bottles.js"></script>
+<script src="content/problems/eg-mail-sacks.js"></script>
+<script src="content/problems/eg-carriage-seats.js"></script>
+<script src="content/problems/eg-bunting-ribbon.js"></script>
+<script src="content/problems/eg-water-cans.js"></script>
+<script src="content/problems/ch-kiosk-sandwiches.js"></script>
+<script src="content/problems/ch-water-tank.js"></script>
+<script src="content/problems/ch-barrier-count.js"></script>
+<script src="content/problems/ch-fare-rise.js"></script>
+<script src="content/problems/pw-seats-reserved.js"></script>
+<script src="content/problems/rr-drink-rate.js"></script>
+<script src="content/hubs/five-situations.js"></script>
+<script src="content/hubs/word-board.js"></script>
+<script src="content/hubs/fraction-yard.js"></script>
+<script src="content/hubs/percent-yard.js"></script>
+<script src="assets/js/hub.js"></script>
+<script src="assets/js/a11y.js"></script>
+<script src="assets/js/selector.js"></script>
+<script src="assets/js/stations.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
