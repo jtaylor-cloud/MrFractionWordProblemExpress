@@ -105,7 +105,7 @@ Zero dependencies, no build step, no framework, no network requests. HTML, CSS a
 
 To publish, upload the repository and set **Settings → Pages → Source** to the **repository root**.
 
-> Do not choose the `/docs` folder option. `docs/` here holds the design and pedagogy specs, not the website. Selecting it publishes the specs and no site.
+> Choose the repository root, not the `/docs` folder option GitHub offers alongside it. `index.html` lives at the root; pointing Pages anywhere else publishes no site.
 
 ### Image files required in `assets/art/`
 
